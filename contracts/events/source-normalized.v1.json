@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "source.normalized.v1",
+  "title": "SourceNormalizedEventV1",
+  "type": "object",
+  "required": [
+    "eventId",
+    "source",
+    "payloadVersion",
+    "externalId",
+    "title",
+    "normalizedAt"
+  ],
+  "properties": {
+    "eventId": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "payloadVersion": { "type": "string", "const": "v1" },
+    "externalId": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "customer": { "type": "string" },
+    "supplier": { "type": "string" },
+    "amount": { "type": "number" },
+    "currency": { "type": "string" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "normalizedAt": { "type": "string", "format": "date-time" },
+    "rawRef": { "type": "string" }
+  },
+  "additionalProperties": false
+}

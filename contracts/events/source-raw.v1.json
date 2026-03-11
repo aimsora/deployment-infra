@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "source.raw.v1",
+  "title": "SourceRawEventV1",
+  "type": "object",
+  "required": [
+    "eventId",
+    "source",
+    "collectedAt",
+    "url",
+    "payloadVersion",
+    "raw"
+  ],
+  "properties": {
+    "eventId": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "collectedAt": { "type": "string", "format": "date-time" },
+    "url": { "type": "string", "format": "uri" },
+    "payloadVersion": { "type": "string", "const": "v1" },
+    "raw": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}

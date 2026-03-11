@@ -1,7 +1,6 @@
 services:
   backend-api:
-    build:
-      context: ../backend-api
+    image: ${BACKEND_API_IMAGE}:${BACKEND_API_IMAGE_TAG}
     environment:
       NODE_ENV: production
       PORT: 3000
@@ -16,12 +15,12 @@ services:
       - postgres
       - redis
       - rabbitmq
+    restart: unless-stopped
     networks:
       - platform-net
 
   scraper-service:
-    build:
-      context: ../scraper-service
+    image: ${SCRAPER_SERVICE_IMAGE}:${SCRAPER_SERVICE_IMAGE_TAG}
     environment:
       NODE_ENV: production
       RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672
@@ -30,16 +29,22 @@ services:
       SCRAPE_SCHEDULE: "*/20 * * * *"
       USE_PLAYWRIGHT: "false"
       SHARED_CONTRACTS_DIR: /opt/shared-contracts
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: ru-central-1
+      S3_ACCESS_KEY: ${MINIO_ROOT_USER}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      S3_BUCKET: ${MINIO_BUCKET}
     volumes:
       - ./contracts:/opt/shared-contracts:ro
     depends_on:
       - rabbitmq
+      - minio
+    restart: unless-stopped
     networks:
       - platform-net
 
   processing-worker:
-    build:
-      context: ../processing-worker
+    image: ${PROCESSING_WORKER_IMAGE}:${PROCESSING_WORKER_IMAGE_TAG}
     environment:
       NODE_ENV: production
       RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672
@@ -53,19 +58,17 @@ services:
     depends_on:
       - rabbitmq
       - backend-api
+    restart: unless-stopped
     networks:
       - platform-net
 
   frontend-app:
-    build:
-      context: ../frontend-app
-      args:
-        NUXT_PUBLIC_GRAPHQL_ENDPOINT: /graphql
-        NUXT_PUBLIC_APP_NAME: AIMSORA Procurement Monitoring
+    image: ${FRONTEND_APP_IMAGE}:${FRONTEND_APP_IMAGE_TAG}
     ports:
       - "8080:80"
     depends_on:
       - backend-api
+    restart: unless-stopped
     networks:
       - platform-net
 

@@ -17,3 +17,6 @@ jobs:
 
       - name: Validate full compose stack
         run: docker compose -f docker-compose.yml -f docker-compose.apps.yml --env-file .env.example config
+
+      - name: Validate deploy compose stack
+        run: docker compose -f docker-compose.yml -f docker-compose.deploy.yml --env-file .env.example config
