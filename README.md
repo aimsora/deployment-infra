@@ -15,7 +15,7 @@
 ## Черновая реализация
 
 - `docker-compose.yml` - инфраструктурные сервисы;
-- `docker-compose.apps.yml` - локальный запуск `backend-api`, `scraper-service`, `processing-worker`, `frontend-app` из исходников;
+- `docker-compose.apps.yml` - локальный запуск `backend-api`, `scraper-service`, `processing-worker`, `aimsora` из исходников;
 - `docker-compose.deploy.yml` - запуск приложений из GHCR-образов для удаленного стенда;
 - `contracts/events/*` - снапшот контрактов для `scraper-service` и `processing-worker`;
 - `Makefile` с командами `up`, `down`, `up-all`, `down-all`;
@@ -74,4 +74,4 @@ make down-all
 - `rabbitmq:5672` (`15672` management)
 - `minio:9000` (`9001` console)
 - `backend-api:3000`
-- `frontend-app:80` (внешний порт `8080`)
+- `aimsora:80` (внешний порт `8080`)

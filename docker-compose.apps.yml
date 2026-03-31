@@ -56,12 +56,11 @@ services:
     networks:
       - platform-net
 
-  frontend-app:
+  aimsora:
     build:
-      context: ../frontend-app
+      context: ../aimsora
       args:
-        NUXT_PUBLIC_GRAPHQL_ENDPOINT: /graphql
-        NUXT_PUBLIC_APP_NAME: AIMSORA Procurement Monitoring
+        VITE_GRAPHQL_ENDPOINT: /graphql
     ports:
       - "8080:80"
     depends_on:

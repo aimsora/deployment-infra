@@ -62,8 +62,8 @@ services:
     networks:
       - platform-net
 
-  frontend-app:
-    image: ${FRONTEND_APP_IMAGE}:${FRONTEND_APP_IMAGE_TAG}
+  aimsora:
+    image: ${AIMSORA_IMAGE}:${AIMSORA_IMAGE_TAG}
     ports:
       - "8080:80"
     depends_on:
