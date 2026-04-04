@@ -12,7 +12,7 @@
 - `backend-api`
 - `processing-worker`
 - `scraper-service`
-- `frontend` c nginx внутри контейнера
+- `frontend` как Nuxt production server
 
 Все сервисы работают в одной сети `platform-net` и обращаются друг к другу по service name.
 
@@ -37,8 +37,10 @@
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD`
 - `ENABLED_SOURCES`
+- `CORS_ALLOWED_ORIGINS`
+- `NUXT_PUBLIC_GRAPHQL_ENDPOINT`
 
-Рабочий шаблон уже лежит в [.env.example](/home/minkin/vkrdiff/deployment-infra/.env.example). Для локального bootstrap `INGEST_API_TOKEN` и `API_INGEST_TOKEN` должны совпадать.
+Рабочий шаблон уже лежит в [.env.example](/home/minkin/vkrdiff/infra/.env.example). Для локального bootstrap `INGEST_API_TOKEN` и `API_INGEST_TOKEN` должны совпадать.
 
 ## Локальный запуск
 
@@ -63,7 +65,7 @@ make up
 ## Куда открыть браузер
 
 - Frontend: `http://localhost:8080`
-- GraphQL через nginx frontend: `http://localhost:8080/graphql`
+- GraphQL backend: `http://localhost:3000/graphql`
 - Backend health: `http://localhost:3000/api/health`
 - RabbitMQ management: `http://localhost:15672`
 - MinIO console: `http://localhost:9001`
@@ -73,7 +75,7 @@ make up
 По умолчанию:
 
 - email: `admin@admin.ru`
-- password: `admin`
+- password: `12345678`
 
 `backend-api` на старте прогоняет Prisma migrations и seed, поэтому demo admin и стартовые данные создаются автоматически.
 
@@ -98,10 +100,10 @@ curl http://localhost:3000/api/health
 curl http://localhost:3000/api/health/ready
 ```
 
-Проверь GraphQL через frontend nginx:
+Проверь GraphQL напрямую через backend:
 
 ```bash
-curl http://localhost:8080/graphql \
+curl http://localhost:3000/graphql \
   -H 'content-type: application/json' \
   --data '{"query":"query { health }"}'
 ```
@@ -123,6 +125,7 @@ docker compose --env-file .env -f docker-compose.yml -f docker-compose.apps.yml 
 - `backend-api` поднялся после миграций и отвечает на `/api/health/ready`
 - `processing-worker` пишет `processing-worker started`
 - `scraper-service` пишет `scraper-service starting`
+- `frontend` отвечает на `http://localhost:8080`
 - в MinIO существует bucket `artifacts` или значение из `S3_BUCKET`
 
 ## Полезные команды
